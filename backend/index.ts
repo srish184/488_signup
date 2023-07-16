@@ -31,7 +31,7 @@ app.post("/register", (req: Request, res: Response) => {
 
   connection.query(fetch, [username], (error: any, resultData: any) => {
     if (resultData.length > 0) {
-      res.json({ status: 200, msg:"User is not available" });
+      res.json({ status: 500, msg: "User is not available" });
     } else {
       const sql = "INSERT INTO users (username, passcode) VALUES (?, ?)";
       connection.query(
@@ -40,14 +40,26 @@ app.post("/register", (req: Request, res: Response) => {
         (error: any, results: any) => {
           if (error) {
             console.error("Error registering user:", error);
-            if(error.sqlMessage == "Check constraint 'users_chk_2' is violated." || error.sqlMessage == "Check constraint 'users_chk_1' is violated."){
-              res.json({ status: 500, msg:"No empty string allowed for username or password field", error:error });
+            if (
+              error.sqlMessage ==
+                "Check constraint 'users_chk_2' is violated." ||
+              error.sqlMessage == "Check constraint 'users_chk_1' is violated."
+            ) {
+              res.json({
+                status: 500,
+                msg: "No empty string allowed for username or password field",
+                error: error,
+              });
             } else {
-              res.json({ status: 500, msg:`Failed to register user. ${error.sqlMessage}`, error:error });
+              res.json({
+                status: 500,
+                msg: `Failed to register user. ${error.sqlMessage}`,
+                error: error,
+              });
             }
           } else {
             console.log("User registered successfully:", results);
-            res.json({ status: 200, msg:"User registered successfully!!"});
+            res.json({ status: 200, msg: "User registered successfully!!" });
           }
         }
       );
