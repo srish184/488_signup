@@ -13,8 +13,8 @@ const App: React.FC = () => {
         username,
         password,
       });
-
-      console.log('User registered successfully!');
+      console.log(response)
+      alert(response.data.msg);
       setUsername('');
       setPassword('');
     } catch (error) {
@@ -32,6 +32,8 @@ const App: React.FC = () => {
             type="text"
             id="username"
             value={username}
+            minLength={4}
+            maxLength={20}
             onChange={(event) => setUsername(event.target.value)}
           />
         </div>
@@ -40,6 +42,8 @@ const App: React.FC = () => {
           <input
             type="password"
             id="password"
+            minLength={4}
+            maxLength={20}
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
